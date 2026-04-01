@@ -275,34 +275,43 @@
   <p class="cb-footer">© 2026 CollegeBound · Built in Los Angeles</p>
 
   <script>
-    const targets = [1847, 1852, 1839, 1861, 1844, 1858];
-    let idx = 0;
-    setInterval(() => {
-      idx = (idx + 1) % targets.length;
-      document.getElementById('counter-num').textContent = targets[idx].toLocaleString();
-    }, 7000);
+   const targets = [1847, 1852, 1839, 1861, 1844, 1858];
+let idx = 0;
+setInterval(() => {
+  idx = (idx + 1) % targets.length;
+  document.getElementById('counter-num').textContent = targets[idx].toLocaleString();
+}, 7000);
 
-    function handleSubmit() {
-      const email = document.getElementById('email-input').value.trim();
-      if (!email || !email.includes('@')) {
-        document.getElementById('email-input').style.borderColor = '#e24b4a';
-        document.getElementById('email-input').focus();
-        return;
-      }
-      document.getElementById('submit-btn').disabled = true;
-      document.getElementById('submit-btn').textContent = 'Joining...';
-      setTimeout(() => {
-        window.location.href = 'https://tally.so/r/zxJMv8?email=' + encodeURIComponent(email);
-      }, 600);
-    }
-
-    document.getElementById('email-input').addEventListener('input', () => {
-      document.getElementById('email-input').style.borderColor = '#ddd';
+async function handleSubmit() {
+  const email = document.getElementById('email-input').value.trim();
+  if (!email || !email.includes('@')) {
+    document.getElementById('email-input').style.borderColor = '#e24b4a';
+    document.getElementById('email-input').focus();
+    return;
+  }
+  document.getElementById('submit-btn').disabled = true;
+  document.getElementById('submit-btn').textContent = 'Joining...';
+  try {
+    const formData = new FormData();
+    formData.append('email', email);
+    await fetch('https://tally.so/r/zxJMv8', {
+      method: 'POST',
+      mode: 'no-cors',
+      body: formData
     });
+  } catch(e) {}
+  document.getElementById('form-area').style.display = 'none';
+  const s = document.getElementById('success-area');
+  s.style.display = 'flex';
+}
 
-    document.getElementById('email-input').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') handleSubmit();
-    });
+document.getElementById('email-input').addEventListener('input', () => {
+  document.getElementById('email-input').style.borderColor = '#ddd';
+});
+
+document.getElementById('email-input').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') handleSubmit();
+});
   </script>
 
 </body>
